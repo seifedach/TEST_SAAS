@@ -20,6 +20,23 @@ def csv_analytics_app():
 
     st.pyplot(fig)
 
+
+def csv_analytics_app():
+    st.title('CSV Analytics Application')
+
+    # Retrieve the uploaded file from session state
+    uploaded_file = st.session_state.get('uploaded_file', None)
+    
+    if uploaded_file is not None:
+        st.success("Uploaded!")  # Print "Uploaded!" after the file is uploaded
+        st.markdown("Uploaded!")
+    else:
+        uploaded_file = st.file_uploader("Upload your CSV file", type=["csv"])
+        if uploaded_file is not None:
+            st.session_state['uploaded_file'] = uploaded_file
+            st.success("Uploaded!")  # Print "Uploaded!" after the file is uploaded
+            st.markdown("Uploaded!")
+
 # Function to verify access code
 def verify_access_code(code):
     # Simulate checking against a list of valid access codes
