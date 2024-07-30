@@ -37,6 +37,33 @@ def csv_analytics_app():
             st.success("Uploaded!")  # Print "Uploaded!" after the file is uploaded
             st.markdown("Uploaded!")
 
+
+
+
+def csv_analytics_app():
+    st.title('CSV Analytics Application')
+    
+    uploaded_file = st.file_uploader("Upload your CSV file", type=["csv"])
+    if uploaded_file is not None:
+        try:
+            df = pd.read_csv(uploaded_file)
+            st.write("Dataframe Preview:")
+            st.dataframe(df)
+            
+            st.write("Summary Statistics:")
+            st.write(df.describe())
+            
+            st.write("Dataframe Shape:")
+            st.write(df.shape)
+            
+            st.write("Column Data Types:")
+            st.write(df.dtypes)
+            
+        except Exception as e:
+            st.error(f"Error reading CSV file: {e}")
+
+            
+
 # Function to verify access code
 def verify_access_code(code):
     # Simulate checking against a list of valid access codes
