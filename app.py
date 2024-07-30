@@ -1,21 +1,27 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
 
 def csv_analytics_app():
-    st.title('CSV Analytics Application')
+    st.title('Random Points Plot')
 
-    # Retrieve the uploaded file from session state
-    uploaded_file = st.session_state.get('uploaded_file', None)
-    
-    if uploaded_file is not None:
-        st.success("Uploaded!")  # Print "Uploaded!" after the file is uploaded
-        st.markdown("Uploaded!")
-    else:
-        uploaded_file = st.file_uploader("Upload your CSV file", type=["csv"])
-        if uploaded_file is not None:
-            st.session_state['uploaded_file'] = uploaded_file
-            st.success("Uploaded!")  # Print "Uploaded!" after the file is uploaded
-            st.markdown("Uploaded!")
+    # Clear other UI elements
+    st.empty()
+
+    # Generate random points
+    num_points = 100
+    x = np.random.rand(num_points)
+    y = np.random.rand(num_points)
+
+    # Plot random points
+    fig, ax = plt.subplots()
+    ax.scatter(x, y, alpha=0.6)
+    ax.set_xlabel('X-axis')
+    ax.set_ylabel('Y-axis')
+    ax.set_title('Scatter Plot of Random Points')
+
+    st.pyplot(fig)
 
 # Function to verify access code
 def verify_access_code(code):
@@ -51,7 +57,7 @@ def main():
         if verify_access_code(access_code):
             st.success('Access code verified! Redirecting to the main application...')
             st.session_state['uploaded_file'] = None  # Clear any previously uploaded file
-            csv_analytics_app()  # Call the main application function
+            st.experimental_rerun()  # Refresh the page to load the CSV analytics app
         else:
             st.error('Invalid access code. Please ensure you have received the correct code after payment verification.')
 
