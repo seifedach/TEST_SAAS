@@ -2,42 +2,9 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-
-def csv_analytics_app():
-    st.title('Random Points Plot')
-
-    # Generate random points
-    num_points = 100
-    x = np.random.rand(num_points)
-    y = np.random.rand(num_points)
-
-    # Plot random points
-    fig, ax = plt.subplots()
-    ax.scatter(x, y, alpha=0.6)
-    ax.set_xlabel('X-axis')
-    ax.set_ylabel('Y-axis')
-    ax.set_title('Scatter Plot of Random Points')
-
-    st.pyplot(fig)
-
-
-def csv_analytics_app():
-    st.title('CSV Analytics Application')
-
-    # Retrieve the uploaded file from session state
-    uploaded_file = st.session_state.get('uploaded_file', None)
-    
-    if uploaded_file is not None:
-        st.success("Uploaded!")  # Print "Uploaded!" after the file is uploaded
-        st.markdown("Uploaded!")
-    else:
-        uploaded_file = st.file_uploader("Upload your CSV file", type=["csv"])
-        if uploaded_file is not None:
-            st.session_state['uploaded_file'] = uploaded_file
-            st.success("Uploaded!")  # Print "Uploaded!" after the file is uploaded
-            st.markdown("Uploaded!")
-
-
+import seaborn as sns
+import plotly.express as px
+import plotly.graph_objects as go
 
 
 def csv_analytics_app():
@@ -62,7 +29,67 @@ def csv_analytics_app():
         except Exception as e:
             st.error(f"Error reading CSV file: {e}")
 
+
+
+
+def csv_analytics_app():
+    st.title('CSV Analytics Application')
+    
+    uploaded_file = st.file_uploader("Upload your CSV file", type=["csv"])
+    if uploaded_file is not None:
+        try:
+            df = pd.read_csv(uploaded_file)
             
+            st.write("### Dataframe Preview:")
+            st.dataframe(df)
+            
+            st.write("### Summary Statistics:")
+            st.write(df.describe())
+            
+            st.write("### Dataframe Shape:")
+            st.write(df.shape)
+            
+            st.write("### Column Data Types:")
+            st.write(df.dtypes)
+
+            # Check if DataFrame has numeric columns
+            numeric_columns = df.select_dtypes(include=['float64', 'int64']).columns.tolist()
+            if numeric_columns:
+                # Correlation Heatmap
+                st.write("### Correlation Heatmap")
+                fig, ax = plt.subplots()
+                sns.heatmap(df.corr(), annot=True, cmap='coolwarm', ax=ax)
+                st.pyplot(fig)
+                
+                # Pairplot
+                st.write("### Pairplot")
+                if len(numeric_columns) > 1:
+                    sns.pairplot(df[numeric_columns])
+                    st.pyplot(plt)
+                
+                # Interactive Scatter Plot with Plotly
+                st.write("### Interactive Scatter Plot")
+                x_axis = st.selectbox('Select X-axis column', options=numeric_columns)
+                y_axis = st.selectbox('Select Y-axis column', options=numeric_columns, index=1)
+                fig = px.scatter(df, x=x_axis, y=y_axis, title=f'Scatter Plot of {x_axis} vs {y_axis}')
+                st.plotly_chart(fig)
+                
+                # Histogram with Plotly
+                st.write("### Interactive Histogram")
+                column = st.selectbox('Select column for histogram', options=numeric_columns)
+                fig = px.histogram(df, x=column, nbins=20, title=f'Histogram of {column}')
+                st.plotly_chart(fig)
+                
+                # Box Plot with Plotly
+                st.write("### Interactive Box Plot")
+                fig = px.box(df, y=numeric_columns, title='Box Plot of Numeric Columns')
+                st.plotly_chart(fig)
+
+        except Exception as e:
+            st.error(f"Error reading CSV file: {e}")
+
+
+
 
 # Function to verify access code
 def verify_access_code(code):
