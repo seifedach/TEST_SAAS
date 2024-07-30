@@ -3,11 +3,19 @@ import pandas as pd
 
 def csv_analytics_app():
     st.title('CSV Analytics Application')
+
+    # Retrieve the uploaded file from session state
+    uploaded_file = st.session_state.get('uploaded_file', None)
     
-    uploaded_file = st.file_uploader("Upload your CSV file", type=["csv"])
     if uploaded_file is not None:
         st.success("Uploaded!")  # Print "Uploaded!" after the file is uploaded
         st.markdown("Uploaded!")
+    else:
+        uploaded_file = st.file_uploader("Upload your CSV file", type=["csv"])
+        if uploaded_file is not None:
+            st.session_state['uploaded_file'] = uploaded_file
+            st.success("Uploaded!")  # Print "Uploaded!" after the file is uploaded
+            st.markdown("Uploaded!")
 
 # Function to verify access code
 def verify_access_code(code):
@@ -31,24 +39,21 @@ Once we verify your payment, we will provide you with an access code.
 def main():
     st.title('Exclusive Content Access')
 
-
-        # Display Payoneer payment instructions
+    # Display Payoneer payment instructions
     st.header('Payment Instructions')
     st.markdown(payoneer_payment_instructions)
 
-
-        # User enters access code to verify payment
+    # User enters access code to verify payment
     st.header('Enter Access Code')
     access_code = st.text_input('Access Code')
 
     if st.button('Verify'):
         if verify_access_code(access_code):
             st.success('Access code verified! Redirecting to the main application...')
+            st.session_state['uploaded_file'] = None  # Clear any previously uploaded file
             csv_analytics_app()  # Call the main application function
         else:
             st.error('Invalid access code. Please ensure you have received the correct code after payment verification.')
-
-
 
 if __name__ == '__main__':
     main()
