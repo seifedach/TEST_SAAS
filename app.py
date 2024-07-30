@@ -57,7 +57,11 @@ def main():
             if verify_access_code(access_code):
                 st.success('Access code verified! You now have access to the application.')
                 st.session_state['verified'] = True  # Set verification state to True
-                st.experimental_rerun()  # Refresh the page to load the CSV analytics app
+                try:
+                    st.experimental_rerun()  # Refresh the page to load the CSV analytics app
+                except:
+                    st.markdown('click verify again')
+
             else:
                 st.error('Invalid access code. Please ensure you have received the correct code after payment verification.')
 
