@@ -1,62 +1,12 @@
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
 
 def csv_analytics_app():
     st.title('CSV Analytics Application')
     
     uploaded_file = st.file_uploader("Upload your CSV file", type=["csv"])
     if uploaded_file is not None:
-        try:
-            # Read the uploaded CSV file
-            df = pd.read_csv(uploaded_file)
-            
-            st.write("Dataframe Preview:")
-            st.dataframe(df)
-            
-            st.write("Summary Statistics:")
-            st.write(df.describe())
-            
-            st.write("Dataframe Shape:")
-            st.write(df.shape)
-            
-            st.write("Column Data Types:")
-            st.write(df.dtypes)
-            
-            # Plotting section
-            st.write("### Data Visualization")
-
-            # Select columns for plotting
-            numeric_columns = df.select_dtypes(include=['float64', 'int64']).columns.tolist()
-            if len(numeric_columns) > 1:
-                x_axis = st.selectbox('Select X-axis column', options=numeric_columns)
-                y_axis = st.selectbox('Select Y-axis column', options=numeric_columns, index=1)
-
-                # Scatter plot
-                st.write("#### Scatter Plot")
-                fig, ax = plt.subplots()
-                ax.scatter(df[x_axis], df[y_axis])
-                ax.set_xlabel(x_axis)
-                ax.set_ylabel(y_axis)
-                st.pyplot(fig)
-
-                # Histogram
-                st.write("#### Histogram")
-                column = st.selectbox('Select column for histogram', options=numeric_columns)
-                fig, ax = plt.subplots()
-                ax.hist(df[column], bins=20)
-                ax.set_xlabel(column)
-                ax.set_ylabel('Frequency')
-                st.pyplot(fig)
-
-                # Pairplot
-                st.write("#### Pairplot")
-                sns.pairplot(df[numeric_columns])
-                st.pyplot(plt)
-
-        except Exception as e:
-            st.error(f"Error reading CSV file: {e}")
+        st.success("Uploaded!")  # Print "Uploaded!" after the file is uploaded
 
 # Function to verify access code
 def verify_access_code(code):
