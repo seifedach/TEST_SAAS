@@ -30,7 +30,13 @@ Once we verify your payment, we will provide you with an access code.
 def main():
     st.title('Exclusive Content Access')
 
-    # User enters access code to verify payment
+
+        # Display Payoneer payment instructions
+    st.header('Payment Instructions')
+    st.markdown(payoneer_payment_instructions)
+
+
+        # User enters access code to verify payment
     st.header('Enter Access Code')
     access_code = st.text_input('Access Code')
 
@@ -41,9 +47,7 @@ def main():
         else:
             st.error('Invalid access code. Please ensure you have received the correct code after payment verification.')
 
-    # Display Payoneer payment instructions
-    st.header('Payment Instructions')
-    st.markdown(payoneer_payment_instructions)
+
 
 if __name__ == '__main__':
     main()
