@@ -7,6 +7,7 @@ def csv_analytics_app():
     uploaded_file = st.file_uploader("Upload your CSV file", type=["csv"])
     if uploaded_file is not None:
         st.success("Uploaded!")  # Print "Uploaded!" after the file is uploaded
+        st.markdown("Uploaded!")
 
 # Function to verify access code
 def verify_access_code(code):
